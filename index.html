@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+    <title>Twitch Channel Online Test</title>
+</head>
+<body>
+<!-- Test framework -->
+<script>
+var params = {};
+location.search.slice(1).split("&").forEach(function (kv) {
+  var a = kv.split("=");
+  params[decodeURIComponent(a[0])] = decodeURIComponent(a[1]) || "";
+});
+
+var channels = params["channels"] ? params["channels"].split(",") : ["riotgames", "dota2ti", "machinima", "lirik", "day9tv", "manvsgame", "wyld"];
+
+for(var i=0; i < channels.length; i++) {
+  var channel = channels[i];
+  var p = document.createElement("p");
+  p.innerHTML = channel + ' = <img data-twitch-channel="' + channel + '">';
+  document.body.appendChild(p);
+}
+</script>
+
+<!-- Actual channel online code -->
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script data-interval="60" src="https://raw.githubusercontent.com/Fugiman/Twitch-Channel-Status/master/twitch-channel-status.min.js"></script>
+</body>
+</html>
