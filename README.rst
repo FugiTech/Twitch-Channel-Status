@@ -4,6 +4,11 @@ Twitch Channel Status
 
 A simple library for adding stream status images to your website.
 
+Demo
+====
+
+An extremely minimilistic demo can be found at http://fugiman.com/Twitch-Channel-Status/
+
 Usage
 =====
 
