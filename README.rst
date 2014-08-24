@@ -12,7 +12,7 @@ Add the following anywhere on your webpage to include the library:
 .. code-block:: html
     
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="https://raw.githubusercontent.com/Fugiman/Twitch-Channel-Status/master/twitch-channel-status.min.js"></script>
+    <script src="https://cdn.rawgit.com/Fugiman/Twitch-Channel-Status/1d74252edf89110507cbf3088f9c3eaa38fac9d3/twitch-channel-status.min.js"></script>
 
 Then create image tags on your webpage to display if a channel is online or offline:
 
