@@ -3,7 +3,7 @@
 
 // Create a closure with a reference to our script
 (function (document, $script) {
-  console.log('[twitch-channel-status] robbimu fork - v1.0.9')
+  console.log('[twitch-channel-status] robbimu fork - v1.0.10')
   // Allow customizing the script with various data-* attributes
   var clientid = $script.attr("data-clientid") || false
       attribute = $script.attr("data-attribute") || "data-twitch-channel",
@@ -49,7 +49,7 @@
       headers: {
         'Client-ID': clientid
       },
-      data: JSON.stringify({"channel": Object.keys(channels).join(","), "limit": Object.keys(channels).length}),
+      data: JSON.stringify({channel: Object.keys(channels).join(","), limit: Object.keys(channels).length}),
       cache: false,
     }).done(function (data) {
       // We can only handle 100 online channels at a time :(
