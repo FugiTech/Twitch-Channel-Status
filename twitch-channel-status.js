@@ -4,11 +4,18 @@
 // Create a closure with a reference to our script
 (function (document, $script) {
   // Allow customizing the script with various data-* attributes
-  var attribute = $script.attr("data-attribute") || "data-twitch-channel",
+  var clientid = $script.attr("data-clientid") || false
+      attribute = $script.attr("data-attribute") || "data-twitch-channel",
       interval = parseInt($script.attr("data-interval")) || false,
       onlineImage = $script.attr("data-online-image") || 'data:image/svg+xml,<?xml version="1.0"?><svg height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="8" fill="green"/></svg>',
       offlineImage = $script.attr("data-offline-image") || 'data:image/svg+xml,<?xml version="1.0"?><svg height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="8" fill="red"/></svg>',
       minInterval = 30; // seconds
+
+  // if there is no clientId we cannot function!
+  if(!clientid) {
+    console.log('[twitch-channel-status] clientid is now manditory for kraken requests. (see: https://blog.twitch.tv/client-id-required-for-kraken-api-calls-afbb8e95f843#.cxn9jkpgi )')
+    console.log('[twitch-channel-status] the clientid can now be set as a `data-clientid` data attribute on the script tag')
+  }
 
   document.refreshTwitchChannelStatuses = function () {
     var channels = {};
@@ -38,7 +45,7 @@
     // Ask twitch for the status of all channels at once
     $.ajax({
       url: "https://api.twitch.tv/kraken/streams",
-      data: {"channel": Object.keys(channels).join(","), "limit": Object.keys(channels).length},
+      data: {"clientid": clientid, "channel": Object.keys(channels).join(","), "limit": Object.keys(channels).length},
       cache: false,
       dataType: "jsonp"
     }).done(function (data) {
