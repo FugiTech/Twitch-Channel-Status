@@ -3,7 +3,7 @@
 
 // Create a closure with a reference to our script
 (function (document, $script) {
-  console.log('[twitch-channel-status] robbimu fork - v1.0.10')
+  console.log('[twitch-channel-status] robbimu fork - v1.0.12')
   // Allow customizing the script with various data-* attributes
   var clientid = $script.attr("data-clientid") || false
       attribute = $script.attr("data-attribute") || "data-twitch-channel",
@@ -45,12 +45,12 @@
 
     // Ask twitch for the status of all channels at once
     $.ajax({
-      url: "https://api.twitch.tv/kraken/streams",
+      type: 'GET',
+      url: 'https://api.twitch.tv/kraken/streams',
+      data: `channel=${channels.join(",")}&limit=${channels.length}`,
       headers: {
         'Client-ID': clientid
-      },
-      data: JSON.stringify({channel: Object.keys(channels).join(","), limit: Object.keys(channels).length}),
-      cache: false,
+      }
     }).done(function (data) {
       // We can only handle 100 online channels at a time :(
       if (data.streams.length < data._total) {
