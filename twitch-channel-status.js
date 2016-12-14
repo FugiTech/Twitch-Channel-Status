@@ -13,8 +13,8 @@
 
   // if there is no clientId we cannot function!
   if(!clientid) {
-    console.log('[twitch-channel-status] clientid is now manditory for kraken requests. (see: https://blog.twitch.tv/client-id-required-for-kraken-api-calls-afbb8e95f843#.cxn9jkpgi )')
-    console.log('[twitch-channel-status] the clientid can now be set as a `data-clientid` data attribute on the script tag')
+    console.log('[twitch-channel-status] `Client-ID` is now mandatory for kraken requests. (see: https://blog.twitch.tv/client-id-required-for-kraken-api-calls-afbb8e95f843#.cxn9jkpgi )')
+    console.log('[twitch-channel-status] your `Client-ID` can now be set as a `data-clientid` data attribute on the script tag')
   }
 
   document.refreshTwitchChannelStatuses = function () {
@@ -45,7 +45,11 @@
     // Ask twitch for the status of all channels at once
     $.ajax({
       url: "https://api.twitch.tv/kraken/streams",
-      data: {"Client-ID": clientid, "channel": Object.keys(channels).join(","), "limit": Object.keys(channels).length},
+      beforeSend: function (request)
+      {
+        request.setRequestHeader("Client-ID", clientid);
+      },
+      data: {"channel": Object.keys(channels).join(","), "limit": Object.keys(channels).length},
       cache: false,
       dataType: "jsonp"
     }).done(function (data) {
