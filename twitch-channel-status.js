@@ -3,7 +3,7 @@
 
 // Create a closure with a reference to our script
 (function (document, $script) {
-  console.log('[twitch-channel-status] robbimu fork - v1.0.8')
+  console.log('[twitch-channel-status] robbimu fork - v1.0.9')
   // Allow customizing the script with various data-* attributes
   var clientid = $script.attr("data-clientid") || false
       attribute = $script.attr("data-attribute") || "data-twitch-channel",
@@ -55,6 +55,7 @@
       // We can only handle 100 online channels at a time :(
       if (data.streams.length < data._total) {
         console.warn("refreshTwitchChannelStatuses couldn't load all online channels! Please reduce the number of channels you are trying to check.");
+        console.dir(data.streams)
       }
 
       // Build a hash of who's online for performance
