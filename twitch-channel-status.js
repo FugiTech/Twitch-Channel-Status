@@ -3,6 +3,7 @@
 
 // Create a closure with a reference to our script
 (function (document, $script) {
+  console.log('[twitch-channel-status] robbimu fork - v1.0.6')
   // Allow customizing the script with various data-* attributes
   var clientid = $script.attr("data-clientid") || false
       attribute = $script.attr("data-attribute") || "data-twitch-channel",
@@ -45,13 +46,13 @@
     // Ask twitch for the status of all channels at once
     $.ajax({
       url: "https://api.twitch.tv/kraken/streams",
-      headers: {
+/*      headers: {
         'Client-ID': 'l01lduyl0cfxlgl45t85qiegau166q'
-      },
-/*      beforeSend: function (request)
+      }, */
+      beforeSend: function (request)
       {
         request.setRequestHeader("Client-ID", clientid);
-      }, */
+      },
       data: {"channel": Object.keys(channels).join(","), "limit": Object.keys(channels).length},
       cache: false,
       dataType: "jsonp"
