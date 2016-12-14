@@ -3,12 +3,20 @@
 
 // Create a closure with a reference to our script
 (function (document, $script) {
+  console.log('[twitch-channel-status] robbimu fork - v1.0.14')
   // Allow customizing the script with various data-* attributes
-  var attribute = $script.attr("data-attribute") || "data-twitch-channel",
+  var clientid = $script.attr("data-clientid") || false
+      attribute = $script.attr("data-attribute") || "data-twitch-channel",
       interval = parseInt($script.attr("data-interval")) || false,
       onlineImage = $script.attr("data-online-image") || 'data:image/svg+xml,<?xml version="1.0"?><svg height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="8" fill="green"/></svg>',
       offlineImage = $script.attr("data-offline-image") || 'data:image/svg+xml,<?xml version="1.0"?><svg height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="8" fill="red"/></svg>',
       minInterval = 30; // seconds
+
+  // if there is no clientId we cannot function!
+  if(!clientid) {
+    console.log('[twitch-channel-status] `Client-ID` is now mandatory for kraken requests. (see: https://blog.twitch.tv/client-id-required-for-kraken-api-calls-afbb8e95f843#.cxn9jkpgi )')
+    console.log('[twitch-channel-status] your `Client-ID` can now be set as a `data-clientid` data attribute on the script tag')
+  }
 
   document.refreshTwitchChannelStatuses = function () {
     var channels = {};
@@ -37,14 +45,17 @@
 
     // Ask twitch for the status of all channels at once
     $.ajax({
-      url: "https://api.twitch.tv/kraken/streams",
-      data: {"channel": Object.keys(channels).join(","), "limit": Object.keys(channels).length},
-      cache: false,
-      dataType: "jsonp"
+      type: 'GET',
+      url: 'https://api.twitch.tv/kraken/streams',
+      data: `channel=${Object.keys(channels).join(",")}&limit=${Object.keys(channels).length}`,
+      headers: {
+        'Client-ID': clientid
+      }
     }).done(function (data) {
       // We can only handle 100 online channels at a time :(
       if (data.streams.length < data._total) {
         console.warn("refreshTwitchChannelStatuses couldn't load all online channels! Please reduce the number of channels you are trying to check.");
+        console.dir(data.streams)
       }
 
       // Build a hash of who's online for performance
@@ -66,6 +77,7 @@
           var $img = imgs[i];
           var src = $img.attr("data-" + (online ? "online" : "offline") + "-image") || image;
           $img.attr("src", src);
+          online? $img.addClass('online'):$img.removeClass('online')
         }
       }
 
